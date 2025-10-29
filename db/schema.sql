@@ -1,4 +1,14 @@
--- CaraTemple initial database schema placeholder.
+-- CaraTemple initial database schema.
 --
--- This file intentionally left blank for now. Tables for users, discussions, posts, favorites and admin logs
--- will be added in the next milestones following the functional specifications.
+-- Defines the core tables required for user authentication.
+
+CREATE TABLE IF NOT EXISTS users (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(40) NOT NULL,
+    email VARCHAR(120) NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY unique_username (username),
+    UNIQUE KEY unique_email (email)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

@@ -33,6 +33,10 @@ if (DISPLAY_ERRORS) {
     error_reporting(0);
 }
 
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 // Helper function to create a PDO instance when needed.
 function getDatabaseConnection(): PDO
 {

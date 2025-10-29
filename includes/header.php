@@ -7,6 +7,10 @@
  * @package CaraTemple\Includes
  */
 ?>
+<?php
+$pageTitle = $page_title ?? 'CaraTemple · Le temple des fans de Carapuce';
+$bodyClass = $body_class ?? '';
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -20,9 +24,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="<?= BASE_URL; ?>/assets/css/main.css" />
-    <title>CaraTemple · Le temple des fans de Carapuce</title>
+    <title><?= htmlspecialchars($pageTitle); ?></title>
 </head>
-<body id="top">
+<body id="top" class="<?= htmlspecialchars($bodyClass); ?>">
 <header class="site-header">
     <?php require __DIR__ . '/navigation.php'; ?>
 </header>
