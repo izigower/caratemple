@@ -1,14 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" role="img" aria-labelledby="pokaflowTitle pokaflowDesc">
-    <title id="pokaflowTitle">Avatar Pokaflow</title>
-    <desc id="pokaflowDesc">Portrait stylisé turquoise et marine.</desc>
-    <defs>
-        <linearGradient id="pokaflowGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#54d1f8" />
-            <stop offset="100%" stop-color="#1570c8" />
-        </linearGradient>
-    </defs>
-    <circle cx="40" cy="40" r="40" fill="#e4f3ff" />
-    <circle cx="40" cy="28" r="15" fill="url(#pokaflowGradient)" />
-    <path d="M18 66c6-10 14-16 22-16s16 6 22 16" fill="#ffffff" stroke="#b9dcff" stroke-width="4" stroke-linecap="round" />
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" aria-labelledby="pokaflowTitle pokaflowDesc" viewBox="0 0 80 80"><title>Avatar Pokaflow</title><desc>Portrait stylisé turquoise et marine.</desc><defs><linearGradient id="a" x1="0%" x2="100%" y1="0%" y2="0%"><stop offset="0%" stop-color="#54d1f8"/><stop offset="100%" stop-color="#1570c8"/></linearGradient></defs><circle cx="40" cy="40" r="40" fill="#e4f3ff"/><circle cx="40" cy="28" r="15" fill="url(#a)"/><path fill="#fff" stroke="#b9dcff" stroke-linecap="round" stroke-width="4" d="M18 66c6-10 14-16 22-16s16 6 22 16"/></svg>

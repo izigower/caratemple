@@ -1,14 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" role="img" aria-labelledby="lolaTitle lolaDesc">
-    <title id="lolaTitle">Avatar Lola</title>
-    <desc id="lolaDesc">Portrait stylisé bleu pastel et rose.</desc>
-    <defs>
-        <linearGradient id="lolaGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#ffc6e7" />
-            <stop offset="100%" stop-color="#7ecbff" />
-        </linearGradient>
-    </defs>
-    <circle cx="40" cy="40" r="40" fill="#fdf0ff" />
-    <circle cx="40" cy="28" r="15" fill="url(#lolaGradient)" />
-    <path d="M20 65c6-11 13-17 20-17s14 6 20 17" fill="#ffffff" stroke="#f5d5ff" stroke-width="4" stroke-linecap="round" />
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" aria-labelledby="lolaTitle lolaDesc" viewBox="0 0 80 80"><title>Avatar Lola</title><desc>Portrait stylisé bleu pastel et rose.</desc><defs><linearGradient id="a" x1="0%" x2="100%" y1="0%" y2="100%"><stop offset="0%" stop-color="#ffc6e7"/><stop offset="100%" stop-color="#7ecbff"/></linearGradient></defs><circle cx="40" cy="40" r="40" fill="#fdf0ff"/><circle cx="40" cy="28" r="15" fill="url(#a)"/><path fill="#fff" stroke="#f5d5ff" stroke-linecap="round" stroke-width="4" d="M20 65c6-11 13-17 20-17s14 6 20 17"/></svg>

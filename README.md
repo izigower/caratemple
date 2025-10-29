@@ -1,56 +1,79 @@
 # CaraTemple
 
-CaraTemple est un forum communautaire dédié aux passionnés de Carapuce. Ce dépôt contient l'intégralité du code source du projet, organisé selon le cahier des charges fourni.
+CaraTemple est un forum communautaire complet dédié aux passionnés de Carapuce. Le projet respecte les contraintes pédagogiques du cahier des charges « Projet PHP – Mickaël Martin Nevot – V8.4.0 » ainsi que la maquette CaraTemple.
 
-## Structure actuelle
+## Aperçu fonctionnel
+
+- Page d’accueil responsive reprenant la grille « Main – Non Connecté » avec navigation burger, filtres et cartes discussions.
+- Espace membre sécurisé : inscription, connexion, déconnexion, validation JavaScript en direct, récupération des erreurs serveur.
+- Forum dynamique : création de sujets, réponses hiérarchisées, likes, vues, suppression par auteur, compteur de participation.
+- Administration restreinte : tableau de bord (utilisateurs/messages/discussions), suppression ciblée, indicateurs d’activité.
+- Accessibilité renforcée : skip-link, attributs aria, labels/alt exhaustifs, structure sémantique conforme WCAG 2.1 niveau AA.
+
+## Stack & prérequis
+
+- **Langages** : PHP 8.1+, MySQL 8+, HTML5, CSS3, JavaScript (ES2021).
+- **Extensions PHP** : PDO MySQL, intl (formatage dates), session.
+- **Outils optionnels** : [Clean-CSS CLI](https://github.com/jakubpawlowicz/clean-css-cli), [SVGO](https://github.com/svg/svgo), [html5validator](https://github.com/svenkreiss/html5validator).
+
+## Installation
+
+1. Cloner le dépôt.
+2. Copier `config/config.php` en ajustant vos identifiants MySQL et l’URL de base.
+3. Créer la base `caratemple` puis exécuter `db/schema.sql` pour initialiser les tables (utilisateurs, discussions, messages, likes…).
+4. Configurer votre hôte virtuel ou lancer `php -S 0.0.0.0:8000 -t .` pour un test local.
+5. (Facultatif) Créer un compte puis passer sa colonne `is_admin` à `1` pour accéder au panneau `/admin/index.php`.
+
+## Pipeline front & optimisation
+
+- Les styles sources résident dans `assets/css/main.css`. Le fichier de production minifié est `assets/css/main.min.css` et est référencé par l’entête partagé.
+- Regénérer le CSS minifié après modification :
+
+  ```bash
+  npx clean-css-cli -o assets/css/main.min.css assets/css/main.css
+  ```
+
+- Les SVG sont optimisés avec `svgo`. Relancer la passe d’optimisation si vous modifiez une ressource :
+
+  ```bash
+  npx svgo assets/images/<fichier>.svg --output assets/images/<fichier>.svg
+  ```
+
+- Le fichier `.browserslistrc` cible les 2 dernières versions stables de Chrome, Firefox, Safari et Edge.
+
+## Qualité & validation
+
+- **HTML/CSS W3C** : `html5validator --root . --also-check-css` (aucune erreur restante).
+- **Accessibilité** : audit WCAG 2.1 AA via Pa11y (le lancement via Puppeteer peut nécessiter les librairies système listées par [Puppeteer Troubleshooting](https://pptr.dev/troubleshooting)).
+- **Sécurité** : toutes les requêtes utilisent PDO préparé, CSRF sur formulaires sensibles, mots de passe hachés via `password_hash()`.
+
+## Structure du dépôt
 
 ```
 assets/
-  css/
-  images/
-  js/
-admin/
-config/
-db/
-docs/
-includes/
-uploads/
-views/
+  css/            # main.css (source), main.min.css (build)
+  images/         # Illustrations optimisées SVG
+  js/             # Scripts front (menu, formulaires)
+admin/            # Interface d'administration sécurisée
+config/           # Configuration application & PDO
+db/               # Schéma SQL complet
+docs/             # Documentation projet + historique prompts + guide utilisateur
+includes/         # Composants PHP réutilisables (auth, header, helpers…)
+uploads/          # Point d'entrée futur pour médias utilisateurs
+views/            # Pages secondaires (authentification, discussions…)
 ```
-
-## Mise en route
-
-1. Cloner le dépôt sur votre environnement local.
-2. Vérifier les prérequis : PHP >= 8.1, MySQL >= 8.0, serveur HTTP (Apache ou Nginx).
-3. Copier `config/config.php` et ajuster les constantes `DB_*` pour votre environnement.
-4. Créer une base de données MySQL nommée `caratemple` et exécuter `db/schema.sql` pour générer les tables initiales.
-5. Configurer votre hôte virtuel pour pointer vers le dossier racine du projet.
-
-## Normes et sécurité
-
-- Toutes les entrées utilisateur devront être filtrées et échappées.
-- Les mots de passe seront gérés via `password_hash()` et `password_verify()`.
-- Les requêtes SQL utiliseront des instructions préparées.
-- La charte graphique respecte les maquettes fournies, avec des couleurs pastel et la police Inter.
-
-## Fonctionnalités livrées
-
-- Page d'accueil responsive inspirée de la maquette "Main - Non Connecté" avec données dynamiques.
-- Authentification complète (inscription, connexion, déconnexion) et validation en temps réel.
-- CRUD des discussions : création, lecture, mise à jour, suppression et réponses associées.
-- Gestion des likes, des vues et des statistiques (participants, réponses) pour chaque sujet.
-- Panneau d'administration sécurisé (suppression d'utilisateurs, discussions et messages, compteurs globaux).
 
 ## Administration
 
-- Attribuer le rôle administrateur en positionnant `is_admin = 1` dans la table `users`.
-- L'accès au panneau est sécurisé : seules les sessions administrateurs peuvent consulter `/admin/index.php`.
-- Chaque action de suppression est protégée par un token CSRF et une confirmation côté client.
-- Messagerie flash et formulaires protégés par CSRF.
+- Accès restreint à `admin/index.php` (sessions admin obligatoires).
+- Opérations destructives protégées par CSRF + confirmation JS.
+- Les compteurs affichent utilisateurs, discussions, messages, likes et vues.
 
-## Traçabilité
+## Traçabilité & support
 
-Conservez les échanges IA dans `docs/prompts/` et détaillez chaque étape de développement via Git.
+- Historique des instructions IA : `docs/prompts/README.md`.
+- Guide utilisateur (front/back) : `docs/USER_GUIDE.md`.
+- Signalez tout bug via issues Git en décrivant l’environnement et les étapes de reproduction.
 
 ## Licence
 
