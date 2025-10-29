@@ -14,17 +14,22 @@ require_once __DIR__ . '/includes/helpers.php';
 require_once __DIR__ . '/includes/auth.php';
 require_once __DIR__ . '/includes/discussions.php';
 
-$page_title = 'CaraTemple · Discussions';
+$page_title = 'Discussions · CaraTemple';
+$page_description = 'Explore les discussions CaraTemple : stratégies Carapuce, affrontements et collections rares partagés par la communauté.';
+$page_url = BASE_URL . '/index.php';
+$sidebar_target_id = 'sidebar-navigation';
 $app_bar_title = 'Discussions';
 $current_user = current_user();
 $discussions = fetch_latest_discussions();
+$spotlightDiscussions = array_slice($discussions, 0, 3);
+$createDiscussionUrl = $current_user !== null ? BASE_URL . '/views/discussion_create.php' : BASE_URL . '/views/login.php';
 
 require_once __DIR__ . '/includes/header.php';
 require_once __DIR__ . '/includes/flash.php';
 ?>
-<main class="page" id="discussions">
-    <div class="dashboard-layout">
-        <aside class="sidebar" data-sidebar>
+<main class="page" id="main-content">
+    <div class="dashboard-layout" id="discussions">
+        <aside class="sidebar" id="<?= htmlspecialchars($sidebar_target_id); ?>" data-sidebar>
             <button class="sidebar__close" type="button" aria-label="Fermer le menu" data-menu-close>
                 <span aria-hidden="true">×</span>
             </button>
@@ -84,7 +89,7 @@ require_once __DIR__ . '/includes/flash.php';
             <?php if ($current_user !== null) : ?>
                 <div class="feed__cta">
                     <p>Une nouvelle idée ? Publie ta question et reçois l'avis des maîtres Carapuce.</p>
-                    <a class="btn primary" href="<?= BASE_URL; ?>/views/discussion_create.php">Créer une discussion</a>
+                    <a class="btn primary" href="<?= htmlspecialchars($createDiscussionUrl); ?>">Créer une discussion</a>
                 </div>
             <?php else : ?>
                 <div class="feed__cta feed__cta--guest">
@@ -155,17 +160,32 @@ require_once __DIR__ . '/includes/flash.php';
             <div class="right-rail__section">
                 <h2 class="right-rail__title" id="spotlight-title">À lire absolument</h2>
                 <ul class="right-rail__list">
-                    <li><span class="right-rail__link right-rail__link--disabled">Guide du Temple Carapuce</span></li>
-                    <li><span class="right-rail__link right-rail__link--disabled">Top équipes aquatiques</span></li>
-                    <li><span class="right-rail__link right-rail__link--disabled">Événements IRL</span></li>
+                    <?php if ($spotlightDiscussions === []) : ?>
+                        <li><span class="right-rail__link right-rail__link--disabled">Aucune discussion à mettre en avant pour le moment.</span></li>
+                    <?php else : ?>
+                        <?php foreach ($spotlightDiscussions as $highlight) : ?>
+                            <?php
+                            $highlightLink = BASE_URL . '/views/discussion.php?id=' . (int) $highlight['id'];
+                            ?>
+                            <li>
+                                <a
+                                    class="right-rail__link"
+                                    href="<?= htmlspecialchars($highlightLink); ?>"
+                                    aria-label="Lire la discussion : <?= htmlspecialchars($highlight['title']); ?>"
+                                >
+                                    <?= htmlspecialchars($highlight['title']); ?>
+                                </a>
+                            </li>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </ul>
             </div>
             <div class="right-rail__section">
                 <h2 class="right-rail__title">Liens utiles</h2>
                 <ul class="right-rail__list">
-                    <li><span class="right-rail__link right-rail__link--disabled">Wiki Carapuce</span></li>
-                    <li><span class="right-rail__link right-rail__link--disabled">Règles du Temple</span></li>
-                    <li><span class="right-rail__link right-rail__link--disabled">Support &amp; sécurité</span></li>
+                    <li><a class="right-rail__link" href="<?= BASE_URL; ?>/views/register.php">Créer un compte CaraTemple</a></li>
+                    <li><a class="right-rail__link" href="<?= BASE_URL; ?>/views/login.php">Se connecter</a></li>
+                    <li><a class="right-rail__link" href="<?= htmlspecialchars($createDiscussionUrl); ?>">Publier une discussion</a></li>
                 </ul>
             </div>
         </aside>

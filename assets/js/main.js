@@ -8,15 +8,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const openButton = document.querySelector('[data-menu-toggle]');
     const closeButton = document.querySelector('[data-menu-close]');
 
+    const setExpandedState = (expanded) => {
+        if (openButton) {
+            openButton.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+        }
+    };
+
     if (sidebar && openButton) {
         openButton.addEventListener('click', () => {
             sidebar.classList.add('is-open');
+            setExpandedState(true);
         });
     }
 
     if (sidebar && closeButton) {
         closeButton.addEventListener('click', () => {
             sidebar.classList.remove('is-open');
+            setExpandedState(false);
         });
     }
 
@@ -34,17 +42,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         sidebar.classList.remove('is-open');
+        setExpandedState(false);
     });
 
     window.addEventListener('keydown', (event) => {
         if (event.key === 'Escape' && sidebar?.classList.contains('is-open')) {
             sidebar.classList.remove('is-open');
+            setExpandedState(false);
         }
     });
 
     window.addEventListener('resize', () => {
         if (window.innerWidth > 992) {
             sidebar?.classList.remove('is-open');
+            setExpandedState(false);
         }
     });
 

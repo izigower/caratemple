@@ -22,6 +22,14 @@ if ($current_user === null) {
     exit;
 }
 
+$page_title = 'Créer une discussion · CaraTemple';
+$page_description = 'Publie une nouvelle question CaraTemple et reçois les conseils des experts Carapuce.';
+$page_url = BASE_URL . '/views/discussion_create.php';
+$sidebar_target_id = 'sidebar-navigation';
+$meta_robots = 'noindex,nofollow';
+$app_bar_title = 'Nouvelle question';
+$body_class = 'thread-page';
+
 $availableCategories = ['Général', 'Stratégie', 'Collection', 'Compétitif', 'Événement'];
 
 $formData = [
@@ -59,17 +67,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$page_title = 'Nouvelle discussion';
-$app_bar_title = 'Nouvelle question';
-$body_class = 'thread-page';
 $csrfToken = generate_csrf_token('discussion_create');
 
 require_once __DIR__ . '/../includes/header.php';
 require_once __DIR__ . '/../includes/flash.php';
 ?>
-<main class="page" id="new-discussion">
-    <div class="dashboard-layout">
-        <aside class="sidebar" data-sidebar>
+<main class="page thread-page" id="main-content">
+    <div class="dashboard-layout" id="new-discussion">
+        <aside class="sidebar" id="<?= htmlspecialchars($sidebar_target_id); ?>" data-sidebar>
             <button class="sidebar__close" type="button" aria-label="Fermer le menu" data-menu-close>
                 <span aria-hidden="true">×</span>
             </button>
@@ -160,10 +165,11 @@ require_once __DIR__ . '/../includes/flash.php';
                                 placeholder="Décris ton sujet, partage du contexte et pose tes questions..."
                                 required
                                 data-validate-field="body"
+                                aria-describedby="discussion-create-body-feedback"
                             ><?= htmlspecialchars($formData['body']); ?></textarea>
                             <span class="input-status" aria-hidden="true"></span>
                         </div>
-                        <p class="input-feedback" data-feedback="body" data-default="Minimum 20 caractères.">
+                        <p class="input-feedback" id="discussion-create-body-feedback" data-feedback="body" data-default="Minimum 20 caractères.">
                             <?= htmlspecialchars($formErrors['body'] ?? 'Minimum 20 caractères.'); ?>
                         </p>
                     </div>

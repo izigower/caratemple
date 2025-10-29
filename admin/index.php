@@ -109,7 +109,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $page_title = 'CaraTemple · Administration';
+$page_description = 'Gère les utilisateurs et les discussions CaraTemple depuis le tableau de bord administrateur.';
+$page_url = BASE_URL . '/admin/index.php';
+$sidebar_target_id = null;
+$meta_robots = 'noindex,nofollow';
 $app_bar_title = 'Administration';
+$body_class = 'admin-page';
 $stats = fetch_admin_dashboard_stats();
 $recentUsers = fetch_admin_recent_users();
 $recentDiscussions = fetch_admin_recent_discussions();
@@ -118,7 +123,7 @@ $recentPosts = fetch_admin_recent_posts();
 require_once __DIR__ . '/../includes/header.php';
 require_once __DIR__ . '/../includes/flash.php';
 ?>
-<main class="page admin-page">
+<main class="page admin-page" id="main-content">
     <div class="admin-layout">
         <section class="admin-section">
             <h2 class="admin-section__title">Tableau de bord</h2>

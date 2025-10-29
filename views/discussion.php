@@ -34,6 +34,18 @@ $current_user = current_user();
 $currentUserId = $current_user['id'] ?? null;
 $is_owner = $current_user !== null && $current_user['id'] === (int) $discussion['user_id'];
 $baseRedirect = BASE_URL . '/views/discussion.php?id=' . $discussionId;
+$descriptionSeed = $discussion['tag_line'] !== null && $discussion['tag_line'] !== ''
+    ? $discussion['tag_line']
+    : $discussion['body'];
+$page_title = $discussion['title'] . ' · Discussion CaraTemple';
+$page_description = create_excerpt($descriptionSeed, 155);
+if ($page_description === '') {
+    $page_description = 'Discussion CaraTemple autour de ' . $discussion['title'];
+}
+$page_url = $baseRedirect;
+$sidebar_target_id = 'sidebar-navigation';
+$app_bar_title = 'Discussion';
+$body_class = 'thread-page';
 
 $edit_mode = $is_owner && ($_GET['edit'] ?? '') === '1';
 $editErrors = [];
@@ -203,10 +215,6 @@ $rootLikedByUser = ($rootPost['liked_by_user'] ?? 0) > 0;
 
 $rootLikeToken = $rootPost ? generate_csrf_token('toggle_like_' . (int) $rootPost['id']) : null;
 
-$page_title = 'Discussion · ' . $discussion['title'];
-$app_bar_title = 'Discussion';
-$body_class = 'thread-page';
-
 $replyToken = generate_csrf_token('discussion_reply_' . $discussionId);
 $updateToken = generate_csrf_token('update_discussion_' . $discussionId);
 $deleteToken = generate_csrf_token('delete_discussion_' . $discussionId);
@@ -214,9 +222,9 @@ $deleteToken = generate_csrf_token('delete_discussion_' . $discussionId);
 require_once __DIR__ . '/../includes/header.php';
 require_once __DIR__ . '/../includes/flash.php';
 ?>
-<main class="page" id="discussion">
-    <div class="dashboard-layout">
-        <aside class="sidebar" data-sidebar>
+<main class="page thread-page" id="main-content">
+    <div class="dashboard-layout" id="discussion">
+        <aside class="sidebar" id="<?= htmlspecialchars($sidebar_target_id); ?>" data-sidebar>
             <button class="sidebar__close" type="button" aria-label="Fermer le menu" data-menu-close>
                 <span aria-hidden="true">×</span>
             </button>
@@ -330,10 +338,11 @@ require_once __DIR__ . '/../includes/flash.php';
                                     rows="6"
                                     required
                                     data-validate-field="body"
+                                    aria-describedby="discussion-body-feedback"
                                 ><?= htmlspecialchars($editForm['body']); ?></textarea>
                                 <span class="input-status" aria-hidden="true"></span>
                             </div>
-                            <p class="input-feedback" data-feedback="body" data-default="Minimum 20 caractères.">
+                            <p class="input-feedback" id="discussion-body-feedback" data-feedback="body" data-default="Minimum 20 caractères.">
                                 <?= htmlspecialchars($editErrors['body'] ?? 'Minimum 20 caractères.'); ?>
                             </p>
                         </div>
@@ -439,10 +448,11 @@ require_once __DIR__ . '/../includes/flash.php';
                                     placeholder="Partage ton avis sur Carapuce..."
                                     required
                                     data-validate-field="message"
+                                    aria-describedby="reply-message-feedback"
                                 ><?= htmlspecialchars($replyDraft); ?></textarea>
                                 <span class="input-status" aria-hidden="true"></span>
                             </div>
-                            <p class="input-feedback" data-feedback="message" data-default="Minimum 3 caractères.">
+                            <p class="input-feedback" id="reply-message-feedback" data-feedback="message" data-default="Minimum 3 caractères.">
                                 <?= htmlspecialchars($replyError ?? 'Minimum 3 caractères.'); ?>
                             </p>
                         </div>

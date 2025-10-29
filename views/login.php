@@ -19,6 +19,10 @@ if (current_user() !== null) {
 }
 
 $page_title = 'Connexion CaraTemple';
+$page_description = 'Connecte-toi à CaraTemple pour rejoindre les discussions Carapuce et retrouver tes contributions.';
+$page_url = BASE_URL . '/views/login.php';
+$sidebar_target_id = null;
+$meta_robots = 'noindex,nofollow';
 $body_class = 'auth-page';
 $app_bar_title = 'Connexion';
 
@@ -57,8 +61,8 @@ $csrfToken = generate_csrf_token('login');
 require_once __DIR__ . '/../includes/header.php';
 require_once __DIR__ . '/../includes/flash.php';
 ?>
-<main class="auth-layout" id="login">
-    <section class="auth-card" aria-labelledby="login-title">
+<main class="auth-layout" id="main-content">
+    <section class="auth-card" id="login" aria-labelledby="login-title">
         <div class="auth-card__content">
             <h1 class="auth-card__title" id="login-title">Entre dans le Temple</h1>
             <p class="auth-card__subtitle">Plus de 150 nouveaux messages t'attendent.</p>
@@ -126,7 +130,7 @@ require_once __DIR__ . '/../includes/flash.php';
         </div>
     </section>
     <aside class="auth-illustration" aria-hidden="true">
-        <img src="<?= BASE_URL; ?>/assets/images/login-illustration.svg" alt="" />
+        <img src="<?= BASE_URL; ?>/assets/images/login-illustration.svg" alt="Illustration de Carapuce accueillant les membres de CaraTemple" />
     </aside>
 </main>
 <?php require_once __DIR__ . '/../includes/footer.php'; ?>

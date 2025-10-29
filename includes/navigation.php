@@ -6,18 +6,32 @@
  *
  * @package CaraTemple\Includes
  */
+$requestUri = $_SERVER['REQUEST_URI'] ?? '';
+
 require_once __DIR__ . '/auth.php';
 
 $appBarTitle = $app_bar_title ?? 'Nouvelle Question';
 $currentUser = current_user();
+$sidebarTargetId = $sidebar_target_id ?? 'sidebar-navigation';
+$isAdminPage = str_contains($requestUri, '/admin/');
+$hasSidebarToggle = $sidebarTargetId !== null;
 ?>
 <nav class="app-bar" aria-label="Barre principale">
     <div class="app-bar__section app-bar__section--left">
-        <button class="menu-toggle" type="button" aria-label="Ouvrir le menu" data-menu-toggle>
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
+        <?php if ($hasSidebarToggle) : ?>
+            <button
+                class="menu-toggle"
+                type="button"
+                aria-label="Ouvrir le menu"
+                aria-controls="<?= htmlspecialchars($sidebarTargetId); ?>"
+                aria-expanded="false"
+                data-menu-toggle
+            >
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        <?php endif; ?>
         <a class="brand" href="<?= BASE_URL; ?>/index.php" aria-label="CaraTemple - accueil">
             <img src="<?= BASE_URL; ?>/assets/images/logo-caratemple.svg" alt="Logo CaraTemple" class="brand-logo" />
             <span class="brand-name">CaraTemple</span>
@@ -32,7 +46,14 @@ $currentUser = current_user();
                 Bonjour, <strong><?= htmlspecialchars($currentUser['username']); ?></strong>
             </span>
             <?php if (!empty($currentUser['is_admin'])) : ?>
-                <a class="btn ghost" href="<?= BASE_URL; ?>/admin/index.php" aria-label="Accéder à l'administration CaraTemple">Administration</a>
+                <a
+                    class="btn ghost"
+                    href="<?= BASE_URL; ?>/admin/index.php"
+                    aria-label="Accéder à l'administration CaraTemple"
+                    <?= $isAdminPage ? 'aria-current="page"' : ''; ?>
+                >
+                    Administration
+                </a>
             <?php endif; ?>
             <a class="btn secondary" href="<?= BASE_URL; ?>/logout.php" aria-label="Se déconnecter">Déconnexion</a>
             <a class="btn primary" href="<?= BASE_URL; ?>/views/discussion_create.php" aria-label="Créer un nouveau post">

@@ -10,11 +10,14 @@
 <footer class="footer" id="contact">
     <div class="footer-content">
         <p>&copy; <?= date('Y'); ?> CaraTemple. Tous droits réservés.</p>
-        <p>
-            <a href="#discussions">Discussions</a> ·
-            <a href="#about">À propos</a> ·
-            <a href="#contact">Contact</a>
-        </p>
+        <nav class="footer-nav" aria-label="Liens internes CaraTemple">
+            <ul>
+                <li><a href="<?= BASE_URL; ?>/index.php#discussions">Discussions</a></li>
+                <li><a href="<?= BASE_URL; ?>/views/register.php#register">Inscription</a></li>
+                <li><a href="<?= BASE_URL; ?>/views/login.php#login">Connexion</a></li>
+                <li><a href="<?= BASE_URL; ?>/views/discussion_create.php#new-discussion">Nouvelle discussion</a></li>
+            </ul>
+        </nav>
         <a class="back-to-top" href="#top" aria-label="Revenir en haut de la page">↑ Retour en haut</a>
     </div>
 </footer>
