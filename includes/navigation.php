@@ -32,7 +32,7 @@ $currentUser = current_user();
                 Bonjour, <strong><?= htmlspecialchars($currentUser['username']); ?></strong>
             </span>
             <a class="btn secondary" href="<?= BASE_URL; ?>/logout.php" aria-label="Se déconnecter">Déconnexion</a>
-            <a class="btn primary" href="#new-post" aria-label="Créer un nouveau post">
+            <a class="btn primary" href="<?= BASE_URL; ?>/views/discussion_create.php" aria-label="Créer un nouveau post">
                 <span aria-hidden="true">＋</span>
                 <span>Créer un post</span>
             </a>

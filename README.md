@@ -35,10 +35,11 @@ views/
 
 ## Fonctionnalités livrées
 
-- Page d'accueil responsive inspirée de la maquette "Main - Non Connecté".
-- Formulaires d'inscription et de connexion avec validation côté client et serveur.
-- Gestion des utilisateurs (création, connexion, déconnexion) persistée en base MySQL.
-- Messages flash pour informer l'utilisateur des actions réalisées.
+- Page d'accueil responsive inspirée de la maquette "Main - Non Connecté" avec données dynamiques.
+- Authentification complète (inscription, connexion, déconnexion) et validation en temps réel.
+- CRUD des discussions : création, lecture, mise à jour, suppression et réponses associées.
+- Gestion des likes, des vues et des statistiques (participants, réponses) pour chaque sujet.
+- Messagerie flash et formulaires protégés par CSRF.
 
 ## Traçabilité
 

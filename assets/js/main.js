@@ -49,6 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     initAuthValidation();
+    initDiscussionValidation();
 });
 
 function initAuthValidation() {
@@ -168,6 +169,129 @@ function initAuthValidation() {
             if (input.value && form.dataset.authType === 'register') {
                 validateInput(input);
             }
+        });
+
+        form.addEventListener('submit', (event) => {
+            let isFormValid = true;
+            inputs.forEach((input) => {
+                const isValid = validateInput(input);
+                if (!isValid) {
+                    isFormValid = false;
+                }
+            });
+
+            if (!isFormValid) {
+                event.preventDefault();
+            }
+        });
+    });
+}
+
+function initDiscussionValidation() {
+    const forms = document.querySelectorAll('[data-validate="discussion"]');
+
+    if (!forms.length) {
+        return;
+    }
+
+    const validators = {
+        title: (value) => {
+            if (!value) {
+                return { valid: false, message: 'Le titre est requis.' };
+            }
+            if (value.length < 6) {
+                return { valid: false, message: '6 caractères minimum.' };
+            }
+            return { valid: true };
+        },
+        body: (value) => {
+            if (!value) {
+                return { valid: false, message: 'Le message est requis.' };
+            }
+            if (value.length < 20) {
+                return { valid: false, message: 'Développe ton idée (20 caractères minimum).' };
+            }
+            return { valid: true };
+        },
+        message: (value) => {
+            if (!value) {
+                return { valid: false, message: 'Ton message est requis.' };
+            }
+            if (value.length < 3) {
+                return { valid: false, message: 'Au moins 3 caractères.' };
+            }
+            return { valid: true };
+        },
+        tag_line: (value) => {
+            if (value.length > 120) {
+                return { valid: false, message: '120 caractères maximum.' };
+            }
+            return { valid: true };
+        },
+        category: (value) => {
+            if (!value) {
+                return { valid: false, message: 'Sélectionne une catégorie.' };
+            }
+            return { valid: true };
+        },
+    };
+
+    forms.forEach((form) => {
+        const inputs = form.querySelectorAll('[data-validate-field]');
+
+        const validateInput = (input) => {
+            const fieldKey = input.dataset.validateField;
+            const value = input.value.trim();
+            const feedback = form.querySelector(`[data-feedback="${fieldKey}"]`);
+            const defaultMessage = feedback?.dataset.default ?? '';
+            const fieldWrapper = input.closest('[data-field]');
+            const statusIndicator = fieldWrapper?.querySelector('.input-status');
+
+            const validator = validators[fieldKey];
+            let result = { valid: true, message: defaultMessage };
+
+            if (typeof validator === 'function') {
+                result = validator(value, form);
+            }
+
+            if (!result.valid) {
+                fieldWrapper?.classList.add('is-invalid');
+                fieldWrapper?.classList.remove('is-valid');
+                if (feedback) {
+                    feedback.textContent = result.message || defaultMessage;
+                }
+                if (statusIndicator) {
+                    statusIndicator.textContent = '⚠️';
+                }
+                return false;
+            }
+
+            fieldWrapper?.classList.remove('is-invalid');
+            fieldWrapper?.classList.add('is-valid');
+            if (feedback) {
+                feedback.textContent = defaultMessage;
+            }
+            if (statusIndicator) {
+                statusIndicator.textContent = '✔️';
+            }
+            return true;
+        };
+
+        inputs.forEach((input) => {
+            const fieldWrapper = input.closest('[data-field]');
+            const statusIndicator = fieldWrapper?.querySelector('.input-status');
+
+            if (fieldWrapper?.classList.contains('is-invalid') && statusIndicator) {
+                statusIndicator.textContent = '⚠️';
+            }
+
+            input.addEventListener('input', () => {
+                validateInput(input);
+            });
+
+            input.addEventListener('blur', () => {
+                validateInput(input);
+            });
         });
 
         form.addEventListener('submit', (event) => {

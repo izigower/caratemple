@@ -1,14 +1,24 @@
 <?php
 /**
- * CaraTemple public landing page following the "Main - Non Connecté" mockup.
+ * CaraTemple community discussions listing.
  *
- * Displays the community feed preview with sidebar navigation and right rail highlights.
+ * Displays the main forum feed with dynamic statistics pulled from the database.
  *
  * @package CaraTemple
  */
 
+declare(strict_types=1);
+
 require_once __DIR__ . '/config/config.php';
 require_once __DIR__ . '/includes/helpers.php';
+require_once __DIR__ . '/includes/auth.php';
+require_once __DIR__ . '/includes/discussions.php';
+
+$page_title = 'CaraTemple · Discussions';
+$app_bar_title = 'Discussions';
+$current_user = current_user();
+$discussions = fetch_latest_discussions();
+
 require_once __DIR__ . '/includes/header.php';
 require_once __DIR__ . '/includes/flash.php';
 ?>
@@ -18,7 +28,7 @@ require_once __DIR__ . '/includes/flash.php';
             <button class="sidebar__close" type="button" aria-label="Fermer le menu" data-menu-close>
                 <span aria-hidden="true">×</span>
             </button>
-            <form class="search" role="search">
+            <form class="search" role="search" method="get" action="<?= BASE_URL; ?>/index.php">
                 <label class="search__label" for="search-input">Rechercher</label>
                 <div class="search__field">
                     <span class="search__icon" aria-hidden="true">🔍</span>
@@ -30,10 +40,10 @@ require_once __DIR__ . '/includes/flash.php';
                 <h2 class="sidebar__title" id="menu-title">Menu</h2>
                 <ul class="sidebar__links">
                     <li class="is-active">
-                        <a href="#discussions" class="sidebar__link" aria-current="page">Discussions</a>
+                        <a href="<?= BASE_URL; ?>/index.php" class="sidebar__link" aria-current="page">Discussions</a>
                     </li>
-                    <li><a href="#tags" class="sidebar__link">Tags</a></li>
-                    <li><a href="#news" class="sidebar__link">Actualités du Temple</a></li>
+                    <li class="is-disabled"><span>Tags</span></li>
+                    <li class="is-disabled"><span>Actualités du Temple</span></li>
                 </ul>
             </section>
 
@@ -44,7 +54,11 @@ require_once __DIR__ . '/includes/flash.php';
                     <li class="is-disabled"><span>Mes commentaires</span></li>
                     <li class="is-disabled"><span>Mes favoris</span></li>
                 </ul>
-                <p class="sidebar__hint">Connecte-toi pour débloquer ces fonctionnalités.</p>
+                <?php if ($current_user === null) : ?>
+                    <p class="sidebar__hint">Connecte-toi pour débloquer ces fonctionnalités.</p>
+                <?php else : ?>
+                    <p class="sidebar__hint">Bienvenue dans ton espace CaraTemple.</p>
+                <?php endif; ?>
             </section>
         </aside>
 
@@ -56,115 +70,105 @@ require_once __DIR__ . '/includes/flash.php';
                         <button class="pill is-active" type="button" role="tab" aria-selected="true">Nouveaux</button>
                     </li>
                     <li role="presentation">
-                        <button class="pill" type="button" role="tab">Populaire</button>
+                        <button class="pill" type="button" role="tab" aria-disabled="true">Populaire</button>
                     </li>
                     <li role="presentation">
-                        <button class="pill" type="button" role="tab">Sans réponse</button>
+                        <button class="pill" type="button" role="tab" aria-disabled="true">Sans réponse</button>
                     </li>
                     <li role="presentation">
-                        <button class="pill" type="button" role="tab">Fermé</button>
+                        <button class="pill" type="button" role="tab" aria-disabled="true">Fermé</button>
                     </li>
                 </ul>
             </div>
 
-            <article class="discussion-card" aria-labelledby="discussion-1-title">
-                <header class="discussion-card__header">
-                    <div class="discussion-card__author">
-                        <img src="<?= BASE_URL; ?>/assets/images/avatar-meliora.svg" alt="Avatar de Meliora" />
-                        <div>
-                            <h3 id="discussion-1-title">Quel est le meilleur jeu Pokémon avec Carapuce ?</h3>
-                            <p class="discussion-card__meta">Meliora · il y a 2 heures</p>
-                        </div>
-                    </div>
-                    <span class="status-badge">Nouveau</span>
-                </header>
-                <p class="discussion-card__excerpt">Je cherche une intro de Carapuce avec vraiment mise en avant. Avez-vous des recommandations ?</p>
-                <footer class="discussion-card__footer" aria-label="Statistiques de la discussion">
-                    <span aria-label="15 commentaires">💬 15</span>
-                    <span aria-label="155 vues">👁️ 155</span>
-                    <button class="tag" type="button">Stratégie</button>
-                </footer>
-            </article>
+            <?php if ($current_user !== null) : ?>
+                <div class="feed__cta">
+                    <p>Une nouvelle idée ? Publie ta question et reçois l'avis des maîtres Carapuce.</p>
+                    <a class="btn primary" href="<?= BASE_URL; ?>/views/discussion_create.php">Créer une discussion</a>
+                </div>
+            <?php else : ?>
+                <div class="feed__cta feed__cta--guest">
+                    <p>Inscris-toi pour poser ta première question et interagir avec la communauté.</p>
+                    <a class="btn secondary" href="<?= BASE_URL; ?>/views/register.php">Rejoindre le Temple</a>
+                </div>
+            <?php endif; ?>
 
-            <article class="discussion-card" aria-labelledby="discussion-2-title">
-                <header class="discussion-card__header">
-                    <div class="discussion-card__author">
-                        <img src="<?= BASE_URL; ?>/assets/images/avatar-pokaflow.svg" alt="Avatar de Pokaflow" />
-                        <div>
-                            <h3 id="discussion-2-title">Carapuce vs Salamèche : qui gagne vraiment ?</h3>
-                            <p class="discussion-card__meta">Pokaflow · il y a 5 heures</p>
-                        </div>
-                    </div>
-                    <span class="status-badge status-badge--popular">Populaire</span>
-                </header>
-                <p class="discussion-card__excerpt">Je veux vos arguments, stratégie par stratégie. Débattons !</p>
-                <footer class="discussion-card__footer" aria-label="Statistiques de la discussion">
-                    <span aria-label="32 commentaires">💬 32</span>
-                    <span aria-label="512 vues">👁️ 512</span>
-                    <button class="tag" type="button">Versus</button>
-                </footer>
-            </article>
-
-            <article class="discussion-card" aria-labelledby="discussion-3-title">
-                <header class="discussion-card__header">
-                    <div class="discussion-card__author">
-                        <img src="<?= BASE_URL; ?>/assets/images/avatar-hugocho.svg" alt="Avatar de Hugocho" />
-                        <div>
-                            <h3 id="discussion-3-title">Collection de cartes Carapuce : vos plus belles trouvailles ?</h3>
-                            <p class="discussion-card__meta">Hugocho · hier</p>
-                        </div>
-                    </div>
-                    <span class="status-badge status-badge--open">Ouvert</span>
-                </header>
-                <p class="discussion-card__excerpt">Partagez vos cartes les plus rares ou vos éditions préférées.</p>
-                <footer class="discussion-card__footer" aria-label="Statistiques de la discussion">
-                    <span aria-label="18 commentaires">💬 18</span>
-                    <span aria-label="245 vues">👁️ 245</span>
-                    <button class="tag" type="button">Collection</button>
-                </footer>
-            </article>
-
-            <article class="discussion-card" aria-labelledby="discussion-4-title">
-                <header class="discussion-card__header">
-                    <div class="discussion-card__author">
-                        <img src="<?= BASE_URL; ?>/assets/images/avatar-lola.svg" alt="Avatar de Lola" />
-                        <div>
-                            <h3 id="discussion-4-title">Équipe aquatique : vos indispensables ?</h3>
-                            <p class="discussion-card__meta">Lola · il y a 3 jours</p>
-                        </div>
-                    </div>
-                    <span class="status-badge status-badge--archived">Archivé</span>
-                </header>
-                <p class="discussion-card__excerpt">Vos movesets préférés pour dominer les arènes aquatiques ?</p>
-                <footer class="discussion-card__footer" aria-label="Statistiques de la discussion">
-                    <span aria-label="9 commentaires">💬 9</span>
-                    <span aria-label="120 vues">👁️ 120</span>
-                    <button class="tag" type="button">Compétitif</button>
-                </footer>
-            </article>
+            <?php if ($discussions === []) : ?>
+                <div class="empty-state" role="status">
+                    <h3>Aucune discussion pour le moment</h3>
+                    <p>Soyez le premier à lancer un sujet autour de Carapuce !</p>
+                </div>
+            <?php else : ?>
+                <?php foreach ($discussions as $discussion) : ?>
+                    <?php
+                    $discussionLink = BASE_URL . '/views/discussion.php?id=' . (int) $discussion['id'];
+                    $createdAt = $discussion['created_at'] ?? '';
+                    $relativeTime = $createdAt ? format_relative_time($createdAt) : '';
+                    $repliesCount = (int) $discussion['replies_count'];
+                    $viewsCount = (int) $discussion['views_count'];
+                    $statusLabel = null;
+                    $createdTimestamp = $createdAt ? strtotime($createdAt) : false;
+                    if ($createdTimestamp !== false && (time() - $createdTimestamp) < 86400) {
+                        $statusLabel = 'Nouveau';
+                    } elseif ($repliesCount >= 10) {
+                        $statusLabel = 'Populaire';
+                    }
+                    $excerpt = $discussion['tag_line'] !== null && $discussion['tag_line'] !== ''
+                        ? $discussion['tag_line']
+                        : create_excerpt($discussion['body']);
+                    ?>
+                    <article class="discussion-card" aria-labelledby="discussion-<?= (int) $discussion['id']; ?>-title">
+                        <header class="discussion-card__header">
+                            <div class="discussion-card__author">
+                                <div class="avatar avatar--small" aria-hidden="true">🐢</div>
+                                <div>
+                                    <h3 id="discussion-<?= (int) $discussion['id']; ?>-title">
+                                        <a href="<?= htmlspecialchars($discussionLink); ?>">
+                                            <?= htmlspecialchars($discussion['title']); ?>
+                                        </a>
+                                    </h3>
+                                    <p class="discussion-card__meta">
+                                        <?= htmlspecialchars($discussion['username']); ?> · <?= htmlspecialchars($relativeTime); ?>
+                                    </p>
+                                </div>
+                            </div>
+                            <?php if ($statusLabel !== null) : ?>
+                                <span class="status-badge<?= $statusLabel === 'Populaire' ? ' status-badge--popular' : ''; ?>">
+                                    <?= htmlspecialchars($statusLabel); ?>
+                                </span>
+                            <?php endif; ?>
+                        </header>
+                        <p class="discussion-card__excerpt">
+                            <?= htmlspecialchars($excerpt); ?>
+                        </p>
+                        <footer class="discussion-card__footer" aria-label="Statistiques de la discussion">
+                            <span aria-label="<?= $repliesCount; ?> réponses">💬 <?= $repliesCount; ?></span>
+                            <span aria-label="<?= $viewsCount; ?> vues">👁️ <?= $viewsCount; ?></span>
+                            <a class="tag" href="<?= htmlspecialchars($discussionLink); ?>"><?= htmlspecialchars($discussion['category']); ?></a>
+                        </footer>
+                    </article>
+                <?php endforeach; ?>
+            <?php endif; ?>
         </section>
 
         <aside class="right-rail" aria-labelledby="spotlight-title">
             <div class="right-rail__section">
                 <h2 class="right-rail__title" id="spotlight-title">À lire absolument</h2>
                 <ul class="right-rail__list">
-                    <li><a href="#" class="right-rail__link">Guide du Temple Carapuce</a></li>
-                    <li><a href="#" class="right-rail__link">Top 10 des équipes aquatiques</a></li>
-                    <li><a href="#" class="right-rail__link">Événements IRL Carapuce</a></li>
+                    <li><span class="right-rail__link right-rail__link--disabled">Guide du Temple Carapuce</span></li>
+                    <li><span class="right-rail__link right-rail__link--disabled">Top équipes aquatiques</span></li>
+                    <li><span class="right-rail__link right-rail__link--disabled">Événements IRL</span></li>
                 </ul>
             </div>
             <div class="right-rail__section">
                 <h2 class="right-rail__title">Liens utiles</h2>
                 <ul class="right-rail__list">
-                    <li><a href="#" class="right-rail__link">Wiki Carapuce</a></li>
-                    <li><a href="#" class="right-rail__link">Règles du Temple</a></li>
-                    <li><a href="#" class="right-rail__link">Support &amp; sécurité</a></li>
+                    <li><span class="right-rail__link right-rail__link--disabled">Wiki Carapuce</span></li>
+                    <li><span class="right-rail__link right-rail__link--disabled">Règles du Temple</span></li>
+                    <li><span class="right-rail__link right-rail__link--disabled">Support &amp; sécurité</span></li>
                 </ul>
             </div>
         </aside>
     </div>
-    <div id="join" class="sr-only" aria-hidden="true"></div>
-    <div id="login" class="sr-only" aria-hidden="true"></div>
-    <div id="new-post" class="sr-only" aria-hidden="true"></div>
 </main>
-<?php require_once __DIR__ . '/includes/footer.php';
+<?php require_once __DIR__ . '/includes/footer.php'; ?>

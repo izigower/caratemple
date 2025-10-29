@@ -70,3 +70,52 @@ function get_flash_messages(): array
 
     return $messages;
 }
+
+/**
+ * Format a timestamp into a short French relative time string.
+ */
+function format_relative_time(string $datetime): string
+{
+    $timestamp = strtotime($datetime);
+
+    if ($timestamp === false) {
+        return '';
+    }
+
+    $diff = time() - $timestamp;
+
+    if ($diff < 60) {
+        return 'à l\'instant';
+    }
+
+    if ($diff < 3600) {
+        $minutes = max(1, (int) floor($diff / 60));
+        return 'il y a ' . $minutes . ' minute' . ($minutes > 1 ? 's' : '');
+    }
+
+    if ($diff < 86400) {
+        $hours = max(1, (int) floor($diff / 3600));
+        return 'il y a ' . $hours . ' heure' . ($hours > 1 ? 's' : '');
+    }
+
+    if ($diff < 604800) {
+        $days = max(1, (int) floor($diff / 86400));
+        return 'il y a ' . $days . ' jour' . ($days > 1 ? 's' : '');
+    }
+
+    return date('d/m/Y', $timestamp);
+}
+
+/**
+ * Create an excerpt limited to the provided number of characters.
+ */
+function create_excerpt(string $text, int $limit = 160): string
+{
+    $clean = trim(strip_tags($text));
+    if (mb_strlen($clean) <= $limit) {
+        return $clean;
+    }
+
+    $truncated = mb_substr($clean, 0, $limit);
+    return rtrim($truncated) . '…';
+}
