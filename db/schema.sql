@@ -1,0 +1,4 @@
+-- CaraTemple initial database schema placeholder.
+--
+-- This file intentionally left blank for now. Tables for users, discussions, posts, favorites and admin logs
+-- will be added in the next milestones following the functional specifications.
