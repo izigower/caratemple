@@ -308,15 +308,7 @@ function delete_discussion(int $discussionId, int $userId): bool
 
     $statement->execute();
 
-    if ($statement->rowCount() < 1) {
-        return false;
-    }
-
-    $touch = $pdo->prepare('UPDATE discussions SET updated_at = NOW() WHERE id = (SELECT discussion_id FROM discussion_posts WHERE id = :id)');
-    $touch->bindValue(':id', $postId, PDO::PARAM_INT);
-    $touch->execute();
-
-    return true;
+    return $statement->rowCount() > 0;
 }
 
 /**

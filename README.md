@@ -39,6 +39,13 @@ views/
 - Authentification complète (inscription, connexion, déconnexion) et validation en temps réel.
 - CRUD des discussions : création, lecture, mise à jour, suppression et réponses associées.
 - Gestion des likes, des vues et des statistiques (participants, réponses) pour chaque sujet.
+- Panneau d'administration sécurisé (suppression d'utilisateurs, discussions et messages, compteurs globaux).
+
+## Administration
+
+- Attribuer le rôle administrateur en positionnant `is_admin = 1` dans la table `users`.
+- L'accès au panneau est sécurisé : seules les sessions administrateurs peuvent consulter `/admin/index.php`.
+- Chaque action de suppression est protégée par un token CSRF et une confirmation côté client.
 - Messagerie flash et formulaires protégés par CSRF.
 
 ## Traçabilité

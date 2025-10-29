@@ -31,6 +31,9 @@ $currentUser = current_user();
             <span class="app-bar__welcome" aria-live="polite">
                 Bonjour, <strong><?= htmlspecialchars($currentUser['username']); ?></strong>
             </span>
+            <?php if (!empty($currentUser['is_admin'])) : ?>
+                <a class="btn ghost" href="<?= BASE_URL; ?>/admin/index.php" aria-label="Accéder à l'administration CaraTemple">Administration</a>
+            <?php endif; ?>
             <a class="btn secondary" href="<?= BASE_URL; ?>/logout.php" aria-label="Se déconnecter">Déconnexion</a>
             <a class="btn primary" href="<?= BASE_URL; ?>/views/discussion_create.php" aria-label="Créer un nouveau post">
                 <span aria-hidden="true">＋</span>

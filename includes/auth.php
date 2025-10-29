@@ -83,7 +83,7 @@ function register_user(array $input): array
 
     $passwordHash = password_hash($password, PASSWORD_DEFAULT);
 
-    $insertStatement = $pdo->prepare('INSERT INTO users (username, email, password_hash) VALUES (:username, :email, :password_hash)');
+    $insertStatement = $pdo->prepare('INSERT INTO users (username, email, password_hash, is_admin) VALUES (:username, :email, :password_hash, 0)');
     $insertStatement->bindValue(':username', $username, PDO::PARAM_STR);
     $insertStatement->bindValue(':email', strtolower($email), PDO::PARAM_STR);
     $insertStatement->bindValue(':password_hash', $passwordHash, PDO::PARAM_STR);
@@ -121,7 +121,7 @@ function authenticate_user(array $input): array
     }
 
     $pdo = getDatabaseConnection();
-    $statement = $pdo->prepare('SELECT id, username, email, password_hash FROM users WHERE email = :email LIMIT 1');
+    $statement = $pdo->prepare('SELECT id, username, email, password_hash, is_admin FROM users WHERE email = :email LIMIT 1');
     $statement->bindValue(':email', strtolower($email), PDO::PARAM_STR);
     $statement->execute();
     $user = $statement->fetch();
@@ -137,6 +137,7 @@ function authenticate_user(array $input): array
         'id' => (int) $user['id'],
         'username' => $user['username'],
         'email' => $user['email'],
+        'is_admin' => (int) $user['is_admin'] === 1,
     ];
 
     return ['success' => true, 'errors' => []];
@@ -172,5 +173,35 @@ function current_user(): ?array
         'id' => (int) $user['id'],
         'username' => (string) $user['username'],
         'email' => (string) $user['email'],
+        'is_admin' => (bool) $user['is_admin'],
     ];
+}
+
+/**
+ * Determine if the current session user has administrator rights.
+ */
+function current_user_is_admin(): bool
+{
+    $user = current_user();
+
+    return $user !== null && $user['is_admin'] === true;
+}
+
+/**
+ * Ensure the current user is authenticated as administrator.
+ * Redirects to the home page with an error flash otherwise.
+ *
+ * @return array{id: int, username: string, email: string, is_admin: bool}
+ */
+function require_admin(): array
+{
+    $user = current_user();
+
+    if ($user === null || $user['is_admin'] !== true) {
+        set_flash_message('error', 'Accès administrateur requis.');
+        header('Location: ' . BASE_URL . '/index.php');
+        exit;
+    }
+
+    return $user;
 }

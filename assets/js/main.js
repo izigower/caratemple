@@ -50,6 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initAuthValidation();
     initDiscussionValidation();
+    initAdminActions();
 });
 
 function initAuthValidation() {
@@ -304,6 +305,23 @@ function initDiscussionValidation() {
             });
 
             if (!isFormValid) {
+                event.preventDefault();
+            }
+        });
+    });
+}
+
+function initAdminActions() {
+    const forms = document.querySelectorAll('form[data-confirm]');
+
+    if (!forms.length) {
+        return;
+    }
+
+    forms.forEach((form) => {
+        form.addEventListener('submit', (event) => {
+            const message = form.dataset.confirm || 'Confirmer cette action ?';
+            if (!window.confirm(message)) {
                 event.preventDefault();
             }
         });
