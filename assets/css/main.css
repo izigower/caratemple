@@ -1,0 +1,266 @@
+/*
+ * CaraTemple main stylesheet.
+ *
+ * Foundation styles for the initial layout, closely following the provided mockups.
+ */
+
+:root {
+    --color-primary: #3aa9f2;
+    --color-primary-light: #7bd0ff;
+    --color-secondary: #0d4a73;
+    --color-background: #f7fbff;
+    --color-surface: #ffffff;
+    --color-text: #1f2933;
+    --color-muted: #6b7a8c;
+    --font-family-base: 'Inter', 'Open Sans', 'Segoe UI', sans-serif;
+    --shadow-soft: 0 10px 30px rgba(61, 131, 224, 0.12);
+    --radius-large: 20px;
+    --radius-medium: 12px;
+    --transition-base: 0.3s ease;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    font-family: var(--font-family-base);
+    background-color: var(--color-background);
+    color: var(--color-text);
+    line-height: 1.6;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+a:hover,
+a:focus {
+    text-decoration: underline;
+}
+
+.primary-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem 4vw;
+    background-color: var(--color-surface);
+    box-shadow: var(--shadow-soft);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.brand-area {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.brand-logo {
+    width: 48px;
+    height: auto;
+}
+
+.brand-name {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--color-secondary);
+}
+
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 0.3rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.menu-toggle span {
+    display: block;
+    width: 24px;
+    height: 3px;
+    background-color: var(--color-secondary);
+    border-radius: 999px;
+    transition: var(--transition-base);
+}
+
+.nav-links {
+    display: flex;
+    gap: 1.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-link {
+    font-weight: 500;
+    color: var(--color-muted);
+    transition: color var(--transition-base);
+}
+
+.nav-link:hover,
+.nav-link:focus {
+    color: var(--color-secondary);
+}
+
+.nav-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    border-radius: 999px;
+    font-weight: 600;
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.btn.primary {
+    background: linear-gradient(90deg, var(--color-primary-light), var(--color-primary));
+    color: #ffffff;
+    box-shadow: 0 10px 20px rgba(58, 169, 242, 0.3);
+}
+
+.btn.secondary {
+    background-color: rgba(13, 74, 115, 0.08);
+    color: var(--color-secondary);
+}
+
+.btn:hover,
+.btn:focus {
+    transform: translateY(-2px);
+}
+
+.hero {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 3rem;
+    padding: 6rem 4vw 4rem;
+    align-items: center;
+}
+
+.hero-illustration {
+    width: 100%;
+    border-radius: var(--radius-large);
+    box-shadow: var(--shadow-soft);
+}
+
+.hero-content h1 {
+    font-size: clamp(2.5rem, 4vw, 3.5rem);
+    margin-bottom: 1rem;
+}
+
+.hero-content p {
+    font-size: 1.125rem;
+    color: var(--color-muted);
+    margin-bottom: 2rem;
+}
+
+.cta-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.section-title {
+    font-size: 1.8rem;
+    margin: 4rem 4vw 1.5rem;
+}
+
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 2rem;
+    padding: 0 4vw 4rem;
+}
+
+.card {
+    background-color: var(--color-surface);
+    border-radius: var(--radius-medium);
+    box-shadow: var(--shadow-soft);
+    padding: 2rem;
+}
+
+.card h3 {
+    margin-top: 0;
+    font-size: 1.25rem;
+}
+
+.card p {
+    color: var(--color-muted);
+}
+
+.footer {
+    background-color: #0f1f2f;
+    color: rgba(255, 255, 255, 0.8);
+    padding: 3rem 4vw;
+}
+
+.footer a {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.back-to-top {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+    font-weight: 600;
+    color: var(--color-primary);
+}
+
+@media (max-width: 960px) {
+    .nav-links {
+        position: absolute;
+        top: 100%;
+        right: 4vw;
+        flex-direction: column;
+        background-color: var(--color-surface);
+        padding: 1.5rem;
+        border-radius: var(--radius-medium);
+        box-shadow: var(--shadow-soft);
+        display: none;
+    }
+
+    .nav-links.is-open {
+        display: flex;
+    }
+
+    .menu-toggle {
+        display: flex;
+    }
+
+    .nav-actions {
+        display: none;
+    }
+}
+
+@media (max-width: 600px) {
+    .primary-nav {
+        padding: 1rem 6vw;
+    }
+
+    .hero {
+        padding: 4rem 6vw 3rem;
+    }
+
+    .section-title {
+        margin-left: 6vw;
+    }
+
+    .cards-grid {
+        padding: 0 6vw 3rem;
+    }
+}
