@@ -33,13 +33,20 @@ require_once __DIR__ . '/includes/flash.php';
             <button class="sidebar__close" type="button" aria-label="Fermer le menu" data-menu-close>
                 <span aria-hidden="true">×</span>
             </button>
-            <form class="search" role="search" method="get" action="<?= BASE_URL; ?>/index.php">
+            <div class="search" role="search">
                 <label class="search__label" for="search-input">Rechercher</label>
                 <div class="search__field">
                     <span class="search__icon" aria-hidden="true">🔍</span>
-                    <input id="search-input" type="search" name="query" placeholder="Chercher un sujet" />
+                    <input 
+                        id="search-input" 
+                        type="search" 
+                        name="query" 
+                        placeholder="Chercher un sujet" 
+                        data-instant-search
+                        autocomplete="off" />
                 </div>
-            </form>
+                <div class="search-results" data-search-results style="display: none;"></div>
+            </div>
 
             <section class="sidebar__section" aria-labelledby="menu-title">
                 <h2 class="sidebar__title" id="menu-title">Menu</h2>

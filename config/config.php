@@ -13,12 +13,12 @@ declare(strict_types=1);
 // Database configuration constants.
 const DB_HOST = 'localhost';
 const DB_NAME = 'caratemple';
-const DB_USER = 'root';
-const DB_PASSWORD = '';
+const DB_USER = 'caratemple_user';
+const DB_PASSWORD = 'password';
 const DB_CHARSET = 'utf8mb4';
 
 // Base URL of the application. Update depending on server configuration.
-const BASE_URL = 'http://localhost/caratemple';
+const BASE_URL = 'http://localhost';
 
 // Toggle detailed error reporting. Keep false in production environment.
 const DISPLAY_ERRORS = true;

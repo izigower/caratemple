@@ -159,7 +159,7 @@ function logout_user(): void
 /**
  * Retrieve the authenticated user information.
  *
- * @return array{id: int, username: string, email: string}|null
+ * @return array{id: int, username: string, email: string, is_admin: bool}|null
  */
 function current_user(): ?array
 {

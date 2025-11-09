@@ -1,0 +1,37 @@
+{
+  "name": "caratemple",
+  "version": "1.0.0",
+  "description": "CaraTemple est un forum communautaire complet dédié aux passionnés de Carapuce. Le projet respecte les contraintes pédagogiques du cahier des charges « Projet PHP – Mickaël Martin Nevot – V8.4.0 » ainsi que la maquette CaraTemple.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "lint": "eslint assets/js/**/*.js",
+    "lint:fix": "eslint assets/js/**/*.js --fix",
+    "lint:css": "stylelint assets/css/**/*.css",
+    "lint:css:fix": "stylelint assets/css/**/*.css --fix",
+    "phpstan": "vendor/bin/phpstan analyse",
+    "test": "vendor/bin/phpunit",
+    "test:coverage": "vendor/bin/phpunit --coverage-html coverage",
+    "optimize:svg": "svgo -f assets/images -o assets/images/optimized --config svgo.config.js && cp assets/images/optimized/*.svg assets/images/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/izigower/caratemple.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/izigower/caratemple/issues"
+  },
+  "homepage": "https://github.com/izigower/caratemple#readme",
+  "devDependencies": {
+    "eslint": "^8.57.1",
+    "eslint-config-standard": "^17.1.0",
+    "stylelint": "^16.25.0",
+    "stylelint-config-standard": "^39.0.1",
+    "svgo": "^4.0.0"
+  }
+}

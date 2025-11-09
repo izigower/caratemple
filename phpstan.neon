@@ -1,0 +1,10 @@
+parameters:
+    level: 5
+    paths:
+        - includes
+        - admin
+        - views
+    excludePaths:
+        - vendor
+    bootstrapFiles:
+        - config/config.php

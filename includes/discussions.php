@@ -199,9 +199,7 @@ function create_discussion(int $userId, array $input): array
         ];
     } catch (Throwable $exception) {
         $pdo->rollBack();
-        if (DISPLAY_ERRORS) {
-            error_log($exception->getMessage());
-        }
+        error_log($exception->getMessage());
 
         return ['success' => false, 'errors' => ['general' => 'Une erreur est survenue.']];
     }
@@ -286,9 +284,7 @@ function update_discussion(int $discussionId, int $userId, array $input): array
         return ['success' => true, 'errors' => []];
     } catch (Throwable $exception) {
         $pdo->rollBack();
-        if (DISPLAY_ERRORS) {
-            error_log($exception->getMessage());
-        }
+        error_log($exception->getMessage());
         return ['success' => false, 'errors' => ['general' => 'Impossible de modifier la discussion.']];
     }
 }

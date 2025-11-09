@@ -200,7 +200,7 @@ require_once __DIR__ . '/../includes/flash.php';
                                                 <input type="hidden" name="user_id" value="<?= $userId; ?>" />
                                                 <input type="hidden" name="csrf_key" value="<?= htmlspecialchars($tokenKey); ?>" />
                                                 <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken); ?>" />
-                                                <button type="submit" class="btn danger">Supprimer</button>
+                                                <button type="button" class="btn danger" data-admin-delete>Supprimer</button>
                                             </form>
                                         <?php endif; ?>
                                     </td>
@@ -256,7 +256,7 @@ require_once __DIR__ . '/../includes/flash.php';
                                             <input type="hidden" name="discussion_id" value="<?= $discussionId; ?>" />
                                             <input type="hidden" name="csrf_key" value="<?= htmlspecialchars($tokenKey); ?>" />
                                             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken); ?>" />
-                                            <button type="submit" class="btn danger">Supprimer</button>
+                                            <button type="button" class="btn danger" data-admin-delete>Supprimer</button>
                                         </form>
                                     </td>
                                 </tr>
@@ -315,7 +315,7 @@ require_once __DIR__ . '/../includes/flash.php';
                                                 <input type="hidden" name="post_id" value="<?= $postId; ?>" />
                                                 <input type="hidden" name="csrf_key" value="<?= htmlspecialchars($tokenKey); ?>" />
                                                 <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken); ?>" />
-                                                <button type="submit" class="btn danger">Supprimer</button>
+                                                <button type="button" class="btn danger" data-admin-delete>Supprimer</button>
                                             </form>
                                         <?php endif; ?>
                                     </td>

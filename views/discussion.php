@@ -136,7 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 exit;
             }
 
-            if (!$is_owner || $current_user === null) {
+            if (!$is_owner) {
                 set_flash_message('error', 'Tu ne peux pas supprimer cette discussion.');
                 header('Location: ' . $baseRedirect);
                 exit;
@@ -159,7 +159,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 exit;
             }
 
-            if (!$is_owner || $current_user === null) {
+            if (!$is_owner) {
                 set_flash_message('error', 'Tu ne peux pas modifier cette discussion.');
                 header('Location: ' . $baseRedirect);
                 exit;
@@ -357,14 +357,24 @@ require_once __DIR__ . '/../includes/flash.php';
                     </div>
                     <?php if ($rootPost !== null) : ?>
                         <div class="thread-card__footer">
-                            <form method="post">
-                                <input type="hidden" name="action" value="toggle_like" />
-                                <input type="hidden" name="post_id" value="<?= (int) $rootPost['id']; ?>" />
-                                <input type="hidden" name="_token" value="<?= htmlspecialchars($rootLikeToken ?? ''); ?>" />
-                                <button class="btn secondary" type="submit"<?= $current_user === null ? ' disabled' : ''; ?>>
-                                    <?= $rootLikedByUser ? 'Je n\'aime plus' : 'J\'aime'; ?> · <?= (int) $likesOnRoot; ?>
-                                </button>
-                            </form>
+                            <button 
+                                class="btn secondary<?= $rootLikedByUser ? ' is-liked' : ''; ?>" 
+                                data-like-button 
+                                data-post-id="<?= (int) $rootPost['id']; ?>"
+                                aria-pressed="<?= $rootLikedByUser ? 'true' : 'false'; ?>"
+                                <?= $current_user === null ? ' disabled' : ''; ?>>
+                                <span><?= $rootLikedByUser ? 'Je n\'aime plus' : 'J\'aime'; ?></span> · <span data-like-count><?= (int) $likesOnRoot; ?></span>
+                            </button>
+                            <noscript>
+                                <form method="post" style="display: inline;">
+                                    <input type="hidden" name="action" value="toggle_like" />
+                                    <input type="hidden" name="post_id" value="<?= (int) $rootPost['id']; ?>" />
+                                    <input type="hidden" name="_token" value="<?= htmlspecialchars($rootLikeToken ?? ''); ?>" />
+                                    <button class="btn secondary" type="submit"<?= $current_user === null ? ' disabled' : ''; ?>>
+                                        <?= $rootLikedByUser ? 'Je n\'aime plus' : 'J\'aime'; ?> (sans JS)
+                                    </button>
+                                </form>
+                            </noscript>
                         </div>
                     <?php endif; ?>
                 <?php endif; ?>
@@ -373,15 +383,16 @@ require_once __DIR__ . '/../includes/flash.php';
             <section class="thread-replies" id="reponses" aria-labelledby="replies-title">
                 <div class="thread-replies__header">
                     <h2 id="replies-title">Réponses</h2>
-                    <span><?= $totalReplies; ?> message<?= $totalReplies > 1 ? 's' : ''; ?></span>
+                    <span><span data-reply-count><?= $totalReplies; ?></span> message<span data-reply-plural><?= $totalReplies > 1 ? 's' : ''; ?></span></span>
                 </div>
 
-                <?php if ($replies === []) : ?>
-                    <div class="empty-state" role="status">
-                        <p>Personne n'a encore répondu. Lance la conversation !</p>
-                    </div>
-                <?php else : ?>
-                    <?php foreach ($replies as $reply) : ?>
+                <div data-replies-container>
+                    <?php if ($replies === []) : ?>
+                        <div class="empty-state" role="status">
+                            <p>Personne n'a encore répondu. Lance la conversation !</p>
+                        </div>
+                    <?php else : ?>
+                        <?php foreach ($replies as $reply) : ?>
                         <?php
                         $replyId = (int) $reply['id'];
                         $replyLiked = ((int) $reply['liked_by_user']) > 0;
@@ -405,14 +416,24 @@ require_once __DIR__ . '/../includes/flash.php';
                                 <?= nl2br(htmlspecialchars($reply['body'])); ?>
                             </div>
                             <footer class="reply-card__footer">
-                                <form method="post">
-                                    <input type="hidden" name="action" value="toggle_like" />
-                                    <input type="hidden" name="post_id" value="<?= $replyId; ?>" />
-                                    <input type="hidden" name="_token" value="<?= htmlspecialchars($replyToken); ?>" />
-                                    <button class="btn ghost" type="submit"<?= $current_user === null ? ' disabled' : ''; ?>>
-                                        <?= $replyLiked ? 'Retirer le like' : 'J\'aime'; ?>
-                                    </button>
-                                </form>
+                                <button 
+                                    class="btn ghost<?= $replyLiked ? ' is-liked' : ''; ?>" 
+                                    data-like-button 
+                                    data-post-id="<?= $replyId; ?>"
+                                    aria-pressed="<?= $replyLiked ? 'true' : 'false'; ?>"
+                                    <?= $current_user === null ? ' disabled' : ''; ?>>
+                                    <span><?= $replyLiked ? 'Retirer le like' : 'J\'aime'; ?></span> · <span data-like-count><?= (int) $reply['likes_count']; ?></span>
+                                </button>
+                                <noscript>
+                                    <form method="post" style="display: inline;">
+                                        <input type="hidden" name="action" value="toggle_like" />
+                                        <input type="hidden" name="post_id" value="<?= $replyId; ?>" />
+                                        <input type="hidden" name="_token" value="<?= htmlspecialchars($replyToken); ?>" />
+                                        <button class="btn ghost" type="submit"<?= $current_user === null ? ' disabled' : ''; ?>>
+                                            <?= $replyLiked ? 'Retirer' : 'J\'aime'; ?> (sans JS)
+                                        </button>
+                                    </form>
+                                </noscript>
                                 <?php if ($current_user !== null && $current_user['id'] === (int) $reply['user_id']) : ?>
                                     <form method="post" onsubmit="return confirm('Supprimer ce message ?');">
                                         <input type="hidden" name="action" value="delete_post" />
@@ -423,8 +444,9 @@ require_once __DIR__ . '/../includes/flash.php';
                                 <?php endif; ?>
                             </footer>
                         </article>
-                    <?php endforeach; ?>
-                <?php endif; ?>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </div>
             </section>
 
             <section class="reply-form" aria-labelledby="reply-title">
@@ -435,8 +457,10 @@ require_once __DIR__ . '/../includes/flash.php';
                         <a href="<?= BASE_URL; ?>/views/register.php">inscris-toi</a> pour participer à la discussion.
                     </p>
                 <?php else : ?>
-                    <form method="post" class="discussion-form" data-validate="discussion" data-form-type="reply">
+                    <form method="post" class="discussion-form" data-validate="discussion" data-form-type="reply" data-ajax-reply-form>
                         <input type="hidden" name="action" value="reply" />
+                        <input type="hidden" name="discussion_id" value="<?= $discussionId; ?>" />
+                        <input type="hidden" name="csrf_key" value="discussion_reply_<?= $discussionId; ?>" />
                         <input type="hidden" name="_token" value="<?= htmlspecialchars($replyToken); ?>" />
                         <div class="form-field<?= $replyError !== null ? ' is-invalid' : ''; ?>" data-field>
                             <label for="message">Ton message</label>

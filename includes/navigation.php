@@ -14,24 +14,22 @@ $appBarTitle = $app_bar_title ?? 'Nouvelle Question';
 $currentUser = current_user();
 $sidebarTargetId = $sidebar_target_id ?? 'sidebar-navigation';
 $isAdminPage = str_contains($requestUri, '/admin/');
-$hasSidebarToggle = $sidebarTargetId !== null;
+$hasSidebarToggle = true; // Sidebar toggle is always enabled
 ?>
 <nav class="app-bar" aria-label="Barre principale">
     <div class="app-bar__section app-bar__section--left">
-        <?php if ($hasSidebarToggle) : ?>
-            <button
-                class="menu-toggle"
-                type="button"
-                aria-label="Ouvrir le menu"
-                aria-controls="<?= htmlspecialchars($sidebarTargetId); ?>"
-                aria-expanded="false"
-                data-menu-toggle
-            >
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-        <?php endif; ?>
+        <button
+            class="menu-toggle"
+            type="button"
+            aria-label="Ouvrir le menu"
+            aria-controls="<?= htmlspecialchars($sidebarTargetId); ?>"
+            aria-expanded="false"
+            data-menu-toggle
+        >
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
         <a class="brand" href="<?= BASE_URL; ?>/index.php" aria-label="CaraTemple - accueil">
             <img src="<?= BASE_URL; ?>/assets/images/logo-caratemple.svg" alt="Logo CaraTemple" class="brand-logo" />
             <span class="brand-name">CaraTemple</span>
@@ -45,7 +43,7 @@ $hasSidebarToggle = $sidebarTargetId !== null;
             <span class="app-bar__welcome" aria-live="polite">
                 Bonjour, <strong><?= htmlspecialchars($currentUser['username']); ?></strong>
             </span>
-            <?php if (!empty($currentUser['is_admin'])) : ?>
+            <?php if ($currentUser['is_admin'] === true) : ?>
                 <a
                     class="btn ghost"
                     href="<?= BASE_URL; ?>/admin/index.php"
